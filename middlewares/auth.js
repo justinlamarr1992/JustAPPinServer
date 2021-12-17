@@ -8,14 +8,12 @@ exports.authCheck = async (req, res, next) => {
     const firebaseUser = await admin
       .auth()
       .verifyIdToken(req.headers.authtoken);
-    console.log("FIREBASE USER IN AUTHCHECK", firebaseUser);
+    //console.log("FIREBASE USER IN AUTHCHECK", firebaseUser);
     req.user = firebaseUser;
     next();
   } catch (err) {
     res.status(401).json({ err: "Invalid or Expired token" });
   }
-  // this is the error no NEXT
-  // next();
 };
 
 exports.adminCheck = async (req, res, next) => {
@@ -26,6 +24,7 @@ exports.adminCheck = async (req, res, next) => {
       err: "Admin Response Access Denied",
     });
   } else {
-    next();
+    console.log("found the admin in the check", adminUser);
+    // next();
   }
 };

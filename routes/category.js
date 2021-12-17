@@ -2,10 +2,10 @@ const express = require("express");
 
 const router = express.Router();
 
-const { authCheck } = require("../middlewares/auth");
+const { authCheck, adminCheck } = require("../middlewares/auth");
 
 const {
-  createOrUpdateUser,
+  create,
   read,
   update,
   remove,
@@ -13,10 +13,10 @@ const {
 } = require("../controllers/category");
 
 // routes;
-router.post("");
-router.post("");
-router.post("");
-router.post("");
-router.post("");
+router.post("/category", authCheck, adminCheck, create);
+router.get("/categories", list);
+router.get("/category/:slug", read);
+router.put("/category/:slug", authCheck, adminCheck, update);
+router.delete("/category/:slug", authCheck, adminCheck, remove);
 
 module.exports = router;
