@@ -1,4 +1,4 @@
-const Sub = require("../models/category");
+const Sub = require("../models/sub");
 const slugify = require("slugify");
 
 exports.create = async (req, res) => {
@@ -7,6 +7,7 @@ exports.create = async (req, res) => {
     const sub = await new Sub({ name, parent, slug: slugify(name) }).save();
     res.json(sub);
   } catch (err) {
+    console.log("SUB CREATE ERROR ----->", err);
     res.status(400).send("Create Sub failed");
   }
 };
@@ -19,11 +20,11 @@ exports.read = async (req, res) => {
   res.json(sub);
 };
 exports.update = async (req, res) => {
-  const { name } = req.body;
+  const { name, parent } = req.body;
   try {
     const updated = await Sub.findOneAndUpdate(
       { slug: req.params.slug },
-      { name, slug: slugify(name) },
+      { name, parent, slug: slugify(name) },
       { new: true }
     );
     res.json(updated);
