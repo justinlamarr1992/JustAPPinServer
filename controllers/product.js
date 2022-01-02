@@ -1,10 +1,6 @@
 const Product = require("../models/product");
 const slugify = require("slugify");
 
-// testing
-// import fs from "fs";
-// import product from "../models/product";
-
 exports.create = async (req, res) => {
   try {
     console.log(req.body);
@@ -17,18 +13,34 @@ exports.create = async (req, res) => {
       err: err.message,
     });
   }
-  // testing image
-  // let fields = req.fields;
-  // let files = req.files;
-  // let testProduct = new Product(fields);
-  // if (files.images) {
-  //   product.image.data = fs.readFileSync(files.image.path);
-  //   product.image.contentType = files.image.type;
-  // }
-  // test to here
+};
+
+exports.listAll = async (req, res) => {
+  let products = await Product.find({})
+    .limit(parseInt(req.params.count))
+    .populate("category")
+    // .populate("subs")
+    .sort([["createdAt", "desc"]])
+    .exec();
+  res.json(products);
+};
+
+exports.remove = async (req, res) => {
+  try {
+    const deleted = await Product.findOneAndRemove({
+      slug: req.params.slug,
+    }).exec();
+    res.json(deleted);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Product Delete Failed");
+  }
 };
 
 exports.read = async (req, res) => {
-  let products = await Product.find({});
-  res.json(products);
+  const product = await Product.findOne({ slug: req.params.slug })
+    .populate("category")
+    // .populate("subs") //this may be the error
+    .exec();
+  res.json(product);
 };
