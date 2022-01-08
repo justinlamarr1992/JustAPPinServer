@@ -19,6 +19,8 @@ exports.read = async (req, res) => {
   let sub = await Sub.findOne({ slug: req.params.slug }).exec();
   res.json(sub);
 };
+
+// Not work find te BUG
 exports.update = async (req, res) => {
   const { name, parent } = req.body;
   try {
