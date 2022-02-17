@@ -1,6 +1,7 @@
 const Category = require("../models/category");
 const slugify = require("slugify");
 const Sub = require("../models/sub");
+const Product = require("../models/product");
 
 exports.create = async (req, res) => {
   try {
@@ -11,13 +12,18 @@ exports.create = async (req, res) => {
     res.status(400).send("Create Category failed");
   }
 };
+
 exports.list = async (req, res) => {
   res.json(await Category.find({}).sort({ createdAt: -1 }).exec());
 };
+
 exports.read = async (req, res) => {
   let category = await Category.findOne({ slug: req.params.slug }).exec();
-  res.json(category);
+  // res.json(category);
+  const products = await Product.find({ category }).populate("category").exec();
+  res.json({ category, products });
 };
+
 exports.update = async (req, res) => {
   const { name } = req.body;
   try {
@@ -31,6 +37,7 @@ exports.update = async (req, res) => {
     res.status(400).send("Create Update Failed");
   }
 };
+
 exports.remove = async (req, res) => {
   try {
     const deleted = await Category.findOneAndDelete({ slug: req.params.slug });
