@@ -140,7 +140,6 @@ exports.productStar = async (req, res) => {
 
 exports.listRelated = async (req, res) => {
   const product = await Product.findById(req.params.productId).exec();
-
   const related = await Product.find({
     _id: { $ne: product._id },
     category: product.category,
@@ -148,7 +147,8 @@ exports.listRelated = async (req, res) => {
     .limit(3)
     .populate("category")
     .populate("subs")
-    // .populate("postedBy")
+    // works with below commented out
+    .populate({ path: "ratings.postedBy" })
     .exec();
 
   res.json(related);
@@ -159,15 +159,57 @@ const handleQuery = async (req, res, query) => {
   const products = await Product.find({ $text: { $search: query } })
     .populate("category", "_id name")
     .populate("subs", "_id name")
-    .populate("postedBy", "_id name")
+    .populate({ path: "ratings.postedBy", select: "_id name" }) // this may be because its on a diff level that other two
+    // Thinks about putting color here
     .exec();
   res.json(products);
 };
 
+const handlePrice = async (req, res, price) => {
+  try {
+    let products = await Product.find({
+      price: {
+        $gte: price[0], //greater than
+        $lte: price[1], //less than
+      },
+    })
+      .populate("category", "_id name")
+      .populate("subs", "_id name")
+      .populate({ path: "ratings.postedBy", select: "_id name" })
+      .exec();
+    res.json(products);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const handleCategory = async (req, res, category) => {
+  try {
+    let products = await Product.find({ category })
+      .populate("category", "_id name")
+      .populate("subs", "_id name")
+      .populate({ path: "ratings.postedBy", select: "_id name" })
+      .exec();
+    res.json(products);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.searchFilters = async (req, res) => {
-  const { query } = req.body;
+  const { query, price, category } = req.body;
   if (query) {
     console.log("query", query);
     await handleQuery(req, res, query);
+  }
+  // price[0,200]
+  if (price !== undefined) {
+    console.log("price -->", price);
+    await handlePrice(req, res, price);
+  }
+
+  if (category) {
+    console.log("category --->", category);
+    await handleCategory(req, res, category);
   }
 };
