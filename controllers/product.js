@@ -232,8 +232,38 @@ const handleSub = async (req, res, sub) => {
   res.json(products);
 };
 
+const handleShipping = async (req, res, shipping) => {
+  const products = await Product.find({ shipping })
+    .populate("category", "_id name")
+    .populate("subs", "_id name")
+    .populate({ path: "ratings.postedBy", select: "_id name" })
+    .exec();
+  res.json(products);
+};
+
+const handleColor = async (req, res, color) => {
+  const products = await Product.find({ color })
+    .populate("category", "_id name")
+    .populate("subs", "_id name")
+    .populate({ path: "ratings.postedBy", select: "_id name" })
+    .exec();
+  res.json(products);
+};
+
+const handleArticle = async (req, res, article) => {
+  const products = await Product.find({ article })
+    .populate("category", "_id name")
+    .populate("subs", "_id name")
+    .populate({ path: "ratings.postedBy", select: "_id name" })
+    .exec();
+  res.json(products);
+};
+
+// add const to handle fabricMaterials
+
 exports.searchFilters = async (req, res) => {
-  const { query, price, category, stars, sub } = req.body;
+  const { query, price, category, stars, sub, shipping, color, article } =
+    req.body;
   if (query) {
     console.log("query", query);
     await handleQuery(req, res, query);
@@ -258,4 +288,17 @@ exports.searchFilters = async (req, res) => {
     console.log("sub -->", sub);
     await handleSub(req, res, sub);
   }
+  if (shipping) {
+    console.log("shipping -->", shipping);
+    await handleShipping(req, res, shipping);
+  }
+  if (color) {
+    console.log("color -->", color);
+    await handleColor(req, res, color);
+  }
+  if (article) {
+    console.log("article -->", article);
+    await handleArticle(req, res, article);
+  }
+  // add if for materials fabric
 };
