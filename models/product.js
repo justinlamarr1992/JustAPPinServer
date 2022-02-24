@@ -24,6 +24,8 @@ const productSchema = new mongoose.Schema(
     sold: { type: Number, default: 0 },
     images: { type: Array },
     shipping: { type: String, enum: ["Yes", "No"] },
+    // Changes these to be in the Subs portions subs will be colors
+    // existing will be the type of Fabric its made of
     color: {
       type: String,
       enum: [
@@ -58,7 +60,6 @@ const productSchema = new mongoose.Schema(
         "Socks",
       ],
     },
-    // add array for materials
     ratings: [{ star: Number, postedBy: { type: ObjectId, ref: "User" } }],
   },
   { timestamps: true }

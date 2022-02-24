@@ -22,7 +22,23 @@ const userSchema = new mongoose.Schema(
       default: "marketing",
       // marketing, appointment, ecomm
     },
-    address: String,
+    // test
+    street: { type: String, required: true },
+    street2: { type: String },
+    city: { type: String, required: true },
+    state: { type: String, required: true },
+    zip: { type: Number, required: true, maxlength: 5 },
+    // test
+    // address: String,
+    // address: [
+    //   {
+    //     street: { type: String, required: true },
+    //     street2: { type: String },
+    //     city: { type: String, required: true },
+    //     state: { type: String, required: true },
+    //     zip: { type: Number, required: true, maxlength: 5 },
+    //   },
+    // ],
     // wishlist: [{ type: objectId, ref: "Products" }],
   },
   { timestamps: true }
