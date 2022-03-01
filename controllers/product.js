@@ -82,21 +82,23 @@ exports.update = async (req, res) => {
 // with pagination
 exports.list = async (req, res) => {
   // console.table(req.body);
-  try {
-    const { sort, order, page } = req.body;
-    const currentPage = page || 1;
-    const perPage = 4;
-    const products = await Product.find({})
-      .skip((currentPage - 1) * perPage)
-      .populate("category")
-      .populate("subs")
-      .sort([[sort, order]])
-      .limit(perPage)
-      .exec();
-    res.json(products);
-  } catch (err) {
-    console.log(err);
-  }
+  res.json(await Product.find({}).sort({ createdAt: -1 }).exec());
+
+  // try {
+  //   const { sort, order, page } = req.body;
+  //   const currentPage = page || 1;
+  //   const perPage = 4;
+  //   const products = await Product.find({})
+  //     .skip((currentPage - 1) * perPage)
+  //     .populate("category")
+  //     .populate("subs")
+  //     .sort([[sort, order]])
+  //     .limit(perPage)
+  //     .exec();
+  //   res.json(products);
+  // } catch (err) {
+  //   console.log(err);
+  // }
 };
 
 exports.productsCount = async (req, res) => {
@@ -109,6 +111,7 @@ exports.productStar = async (req, res) => {
   const user = await User.findOne({ email: req.user.email }).exec();
   const { star } = req.body;
   //who is updating
+
   //check if user already rated product
   let existingRatingObject = product.ratings.find(
     (ele) => ele.postedBy.toString() === user._id.toString()

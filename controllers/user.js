@@ -60,21 +60,35 @@ exports.emptyCart = async (req, res) => {
   res.json(cart);
 };
 
-exports.saveAddress = async (req, res) => {
-  const userAddress = await User.findOneAndUpdate(
-    { email: req.user.email },
-    // { address: req.body.address }
-    // { street: req.body.address.street },
-    // { street2: req.body.address.street2 },
-    // { city: req.body.address.city },
-    // { state: req.body.address.state },
-    // { zip: req.body.address.zip }
-    { street: req.body.street },
-    { street2: req.body.street2 },
-    { city: req.body.city },
-    { state: req.body.state },
-    { zip: req.body.zip }
-  ).exec();
+// exports.saveAddress = async (req, res) => {
+//   const userAddress = await User.findOneAndUpdate(
+//     { email: req.user.email },
+//     { address: req.body.address },
+//     { street: req.body.address.street },
+//     { street2: req.body.address.street2 },
+//     { city: req.body.address.city },
+//     { state: req.body.address.state },
+//     { zip: req.body.address.zip }
+//     // { street: req.body.street },
+//     // { street2: req.body.street2 },
+//     // { city: req.body.city },
+//     // { state: req.body.state },
+//     // { zip: req.body.zip }
+//   ).exec();
 
-  res.json({ ok: true });
-};
+//   res.json({ ok: true });
+// };
+
+// exports.updateAddress = async (req, res) => {
+//   try {
+//     const updated = await User.findOneAndUpdate(
+//       { slug: req.params.slug },
+//       req.body,
+//       { new: true }
+//     ).exec();
+//     res.json(updated);
+//   } catch (err) {
+//     console.log("USER UPDATE ERROR --->", err);
+//     res.status(400).json({ err: err.message });
+//   }
+// };
