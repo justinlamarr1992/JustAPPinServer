@@ -84,21 +84,21 @@ exports.list = async (req, res) => {
   // console.table(req.body);
   res.json(await Product.find({}).sort({ createdAt: -1 }).exec());
 
-  // try {
-  //   const { sort, order, page } = req.body;
-  //   const currentPage = page || 1;
-  //   const perPage = 4;
-  //   const products = await Product.find({})
-  //     .skip((currentPage - 1) * perPage)
-  //     .populate("category")
-  //     .populate("subs")
-  //     .sort([[sort, order]])
-  //     .limit(perPage)
-  //     .exec();
-  //   res.json(products);
-  // } catch (err) {
-  //   console.log(err);
-  // }
+  try {
+    const { sort, order, page } = req.body;
+    const currentPage = page || 1;
+    const perPage = 4;
+    const products = await Product.find({})
+      .skip((currentPage - 1) * perPage)
+      .populate("category")
+      .populate("subs")
+      .sort([[sort, order]])
+      .limit(perPage)
+      .exec();
+    res.json(products);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 exports.productsCount = async (req, res) => {

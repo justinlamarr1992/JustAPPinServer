@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const Product = require("../models/product");
 const Cart = require("../models/cart");
+const Discount = require("../models/discount");
 
 exports.userCart = async (req, res) => {
   console.log(req.body); //{cart:[]}
@@ -90,4 +91,33 @@ exports.updateAddress = async (req, res) => {
     console.log("USER UPDATE ERROR --->", err);
     res.status(400).json({ err: err.message });
   }
+};
+
+// see if the address can be change to this as well as the function
+exports.applyDiscountToUserCart = async (req, res) => {
+  const { discount } = req.body;
+  console.log("DISCOUNT", discount);
+  const validDiscount = await Discount.findOne({ name: discount }).exec();
+  if (validDiscount === null) {
+    return res.json({
+      err: "Invalid Discount",
+    });
+  }
+  console.log("Valid Discount", validDiscount);
+  const user = await User.findOne({ email: req.user.email }).exec();
+  let { products, cartTotal } = await Cart.findOne({ orderedBy: user._id })
+    .populate("products.product", "_id title price")
+    .exec();
+  console.log("Cart Total", cartTotal, "rate", validDiscount.rate);
+  // calculate total after discount
+  let totalAfterDiscount = (
+    cartTotal -
+    (cartTotal * validDiscount.rate) / 100
+  ).toFixed(2);
+  Cart.findOneAndUpdate(
+    { orderedBy: user._id },
+    { totalAfterDiscount },
+    { new: true }
+  ).exec();
+  res.json(totalAfterDiscount);
 };

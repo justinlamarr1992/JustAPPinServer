@@ -11,6 +11,7 @@ const {
   emptyCart,
   saveAddress,
   updateAddress,
+  applyDiscountToUserCart,
 } = require("../controllers/user");
 
 // routes
@@ -23,5 +24,8 @@ router.delete("/user/cart", authCheck, emptyCart); //empty cart
 // address
 router.post("/user/address", authCheck, saveAddress);
 router.put("/user/address", authCheck, updateAddress);
+
+// discount
+router.post("/user/cart/discount", authCheck, applyDiscountToUserCart);
 
 module.exports = router;
