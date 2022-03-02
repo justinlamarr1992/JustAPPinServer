@@ -9,8 +9,8 @@ const {
   userCart,
   getUserCart,
   emptyCart,
-  // saveAddress,
-  // updateAddress,
+  saveAddress,
+  updateAddress,
 } = require("../controllers/user");
 
 // routes
@@ -21,7 +21,7 @@ router.get("/user/cart", authCheck, getUserCart); //get Cart
 router.delete("/user/cart", authCheck, emptyCart); //empty cart
 
 // address
-// router.post("/user/address", authCheck, saveAddress);
-// router.put("/user/address", authCheck, updateAddress);
+router.post("/user/address", authCheck, saveAddress);
+router.put("/user/address", authCheck, updateAddress);
 
 module.exports = router;
