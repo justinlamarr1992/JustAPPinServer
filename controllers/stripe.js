@@ -5,7 +5,7 @@ const Discount = require("../models/discount");
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
 exports.createPaymentIntent = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { discountApplied } = req.body;
   // later apply discount
   // later caluclate price
@@ -29,13 +29,13 @@ exports.createPaymentIntent = async (req, res) => {
     finalAmount = cartTotal * 100;
   }
 
-  console.log("Cart Total Charged", cartTotal);
   // create payment intent with order amount + currency
 
   const paymentIntent = await stripe.paymentIntents.create({
     amount: finalAmount,
     currency: "usd",
   });
+
   res.send({
     clientSecret: paymentIntent.client_secret,
     cartTotal,

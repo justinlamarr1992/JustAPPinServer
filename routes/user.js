@@ -12,6 +12,7 @@ const {
   saveAddress,
   updateAddress,
   applyDiscountToUserCart,
+  createOrder,
 } = require("../controllers/user");
 
 // routes
@@ -27,5 +28,8 @@ router.put("/user/address", authCheck, updateAddress);
 
 // discount
 router.post("/user/cart/discount", authCheck, applyDiscountToUserCart);
+
+// order
+router.post("/user/order", authCheck, createOrder);
 
 module.exports = router;
