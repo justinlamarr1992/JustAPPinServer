@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { objectId } = mongoose.Schema;
+const { ObjectId } = mongoose.Schema;
 
 const userSchema = new mongoose.Schema(
   {
@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema(
       zip: { type: Number, required: true, maxlength: 5 },
     },
 
-    // wishlist: [{ type: objectId, ref: "Products" }],
+    wishlist: [{ type: ObjectId, ref: "Product" }],
   },
   { timestamps: true }
 );
